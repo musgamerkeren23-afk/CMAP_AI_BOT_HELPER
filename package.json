@@ -4,6 +4,6 @@
   "private": true,
   "description": "Serverless backend for CMAP Helper AI",
   "engines": {
-    "node": "22.x"
+    "node": "24.x"
   }
 }
