@@ -1,0 +1,9 @@
+{
+  "name": "cmap-helper-ai-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Serverless backend for CMAP Helper AI",
+  "engines": {
+    "node": "22.x"
+  }
+}
