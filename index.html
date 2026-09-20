@@ -1,0 +1,2145 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050a09">
+<title>CMAP Helper AI V1</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+:root{
+  --bg:#050908;
+  --panel:#08120f;
+  --panel2:#0b1713;
+  --cyan:#00eaff;
+  --green:#39ff88;
+  --text:#e8fff3;
+  --muted:#78a99a;
+  --danger:#ff4d6d;
+  --border:rgba(0,234,255,.35);
+}
+
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 20% 10%,rgba(0,234,255,.08),transparent 30%),
+    radial-gradient(circle at 80% 90%,rgba(57,255,136,.07),transparent 30%),
+    var(--bg);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+button,
+input,
+textarea,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.app{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+/* HEADER */
+
+header{
+  height:68px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 18px;
+  border-bottom:1px solid var(--border);
+  background:rgba(4,10,8,.92);
+  backdrop-filter:blur(10px);
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.logo{
+  width:40px;
+  height:40px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--cyan);
+  border-radius:10px;
+  color:var(--cyan);
+  font-weight:900;
+  box-shadow:
+    0 0 10px rgba(0,234,255,.25),
+    inset 0 0 10px rgba(0,234,255,.08);
+}
+
+.brand h1{
+  font-size:17px;
+}
+
+.brand span{
+  display:block;
+  color:var(--green);
+  font-size:11px;
+  margin-top:3px;
+}
+
+.status{
+  font-size:11px;
+  color:var(--green);
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.status-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 8px var(--green);
+}
+
+/* NAV */
+
+nav{
+  display:flex;
+  gap:7px;
+  padding:10px;
+  overflow-x:auto;
+  border-bottom:1px solid rgba(0,234,255,.15);
+  background:#06100d;
+}
+
+.nav-btn{
+  flex:0 0 auto;
+  border:1px solid rgba(0,234,255,.18);
+  color:var(--muted);
+  background:#07110e;
+  padding:9px 13px;
+  border-radius:8px;
+  font-size:12px;
+}
+
+.nav-btn:hover,
+.nav-btn.active{
+  color:#00100b;
+  background:linear-gradient(90deg,var(--cyan),var(--green));
+  border-color:transparent;
+  font-weight:bold;
+}
+
+/* MAIN */
+
+main{
+  width:100%;
+  max-width:1100px;
+  margin:auto;
+  padding:20px;
+  flex:1;
+}
+
+.tab{
+  display:none;
+}
+
+.tab.active{
+  display:block;
+}
+
+.page-title{
+  margin-bottom:18px;
+}
+
+.page-title h2{
+  font-size:23px;
+  margin-bottom:5px;
+}
+
+.page-title p{
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* CARDS */
+
+.card{
+  background:
+    linear-gradient(145deg,rgba(8,23,19,.96),rgba(4,12,10,.96));
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:18px;
+  margin-bottom:15px;
+  box-shadow:0 0 20px rgba(0,234,255,.035);
+}
+
+.card h3{
+  color:var(--cyan);
+  font-size:15px;
+  margin-bottom:12px;
+}
+
+label{
+  display:block;
+  color:#a6d8c9;
+  font-size:12px;
+  margin-bottom:6px;
+}
+
+input,
+textarea,
+select{
+  width:100%;
+  color:var(--text);
+  background:#030907;
+  border:1px solid rgba(0,234,255,.25);
+  outline:none;
+  border-radius:9px;
+  padding:11px;
+  margin-bottom:12px;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+  border-color:var(--cyan);
+  box-shadow:0 0 8px rgba(0,234,255,.12);
+}
+
+textarea{
+  min-height:150px;
+  resize:vertical;
+}
+
+select option{
+  background:#07110e;
+}
+
+/* BUTTONS */
+
+.actions{
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  border:1px solid var(--cyan);
+  background:#07120f;
+  color:var(--cyan);
+  border-radius:8px;
+  padding:10px 14px;
+  font-weight:bold;
+  font-size:12px;
+}
+
+.btn:hover{
+  background:rgba(0,234,255,.1);
+  box-shadow:0 0 12px rgba(0,234,255,.15);
+}
+
+.btn.primary{
+  border-color:var(--green);
+  color:#001008;
+  background:linear-gradient(90deg,var(--green),var(--cyan));
+}
+
+.btn.danger{
+  border-color:var(--danger);
+  color:var(--danger);
+}
+
+.btn.small{
+  padding:7px 10px;
+}
+
+/* QUICK PROMPTS */
+
+.quick{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  margin:10px 0 14px;
+}
+
+.chip{
+  background:#07130f;
+  border:1px solid rgba(57,255,136,.25);
+  color:var(--green);
+  border-radius:20px;
+  padding:7px 10px;
+  font-size:11px;
+}
+
+.chip:hover{
+  border-color:var(--green);
+}
+
+/* OUTPUT */
+
+.output{
+  background:#020605;
+  border:1px solid rgba(57,255,136,.28);
+  border-radius:10px;
+  padding:14px;
+  white-space:pre-wrap;
+  overflow:auto;
+  min-height:100px;
+  color:#dffff0;
+  font-family:Consolas,monospace;
+  font-size:12px;
+  line-height:1.6;
+}
+
+.output.empty{
+  color:#56776d;
+  font-family:Arial,sans-serif;
+}
+
+/* GRID */
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:15px;
+}
+
+.grid3{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+}
+
+/* LOGIC */
+
+.logic-flow{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:8px;
+  margin-top:14px;
+}
+
+.logic-box{
+  border:1px solid var(--cyan);
+  background:#06120f;
+  border-radius:8px;
+  padding:10px;
+  min-width:130px;
+}
+
+.logic-box small{
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  margin-bottom:4px;
+}
+
+.logic-box strong{
+  color:var(--green);
+  font-size:11px;
+}
+
+.arrow{
+  color:var(--cyan);
+  font-weight:bold;
+}
+
+/* TOGGLE */
+
+.toggle-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:11px 0;
+  border-bottom:1px solid rgba(0,234,255,.1);
+}
+
+.toggle{
+  width:42px;
+  height:23px;
+  background:#13211c;
+  border:1px solid #34554a;
+  border-radius:20px;
+  position:relative;
+  cursor:pointer;
+}
+
+.toggle::after{
+  content:"";
+  position:absolute;
+  width:17px;
+  height:17px;
+  top:2px;
+  left:2px;
+  border-radius:50%;
+  background:#6c887d;
+  transition:.2s;
+}
+
+.toggle.on{
+  background:rgba(57,255,136,.15);
+  border-color:var(--green);
+}
+
+.toggle.on::after{
+  left:21px;
+  background:var(--green);
+  box-shadow:0 0 8px var(--green);
+}
+
+/* HISTORY */
+
+.history-item{
+  border:1px solid rgba(0,234,255,.15);
+  border-radius:9px;
+  padding:12px;
+  margin-bottom:9px;
+  background:#06100d;
+}
+
+.history-item .meta{
+  color:var(--green);
+  font-size:10px;
+  margin-bottom:6px;
+}
+
+.history-item .input-preview{
+  color:#b5d4c9;
+  font-size:12px;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+
+/* KNOWLEDGE */
+
+.notice{
+  padding:11px;
+  border-left:3px solid var(--green);
+  background:rgba(57,255,136,.04);
+  color:#a9cfc0;
+  font-size:12px;
+  line-height:1.5;
+  margin-bottom:13px;
+}
+
+.warning{
+  border-left-color:#ffc857;
+  background:rgba(255,200,87,.04);
+}
+
+/* FOOTER */
+
+footer{
+  border-top:1px solid rgba(0,234,255,.12);
+  padding:14px;
+  text-align:center;
+  color:#4e7065;
+  font-size:10px;
+}
+
+/* MOBILE */
+
+@media(max-width:700px){
+  header{
+    height:60px;
+    padding:0 12px;
+  }
+
+  .brand h1{
+    font-size:14px;
+  }
+
+  .logo{
+    width:34px;
+    height:34px;
+  }
+
+  .status{
+    display:none;
+  }
+
+  main{
+    padding:13px;
+  }
+
+  .grid,
+  .grid3{
+    grid-template-columns:1fr;
+  }
+
+  .page-title h2{
+    font-size:20px;
+  }
+
+  .card{
+    padding:14px;
+  }
+
+  textarea{
+    min-height:130px;
+  }
+
+  .logic-flow{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .logic-box{
+    width:100%;
+  }
+
+  .arrow{
+    text-align:center;
+    transform:rotate(90deg);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header>
+  <div class="brand">
+    <div class="logo">C</div>
+    <div>
+      <h1>CMAP Helper AI</h1>
+      <span>Castle Make and Play • V1</span>
+    </div>
+  </div>
+
+  <div class="status">
+    <span class="status-dot"></span>
+    READY
+  </div>
+</header>
+
+<nav>
+  <button class="nav-btn active" data-tab="ai">🤖 AI</button>
+  <button class="nav-btn" data-tab="logic">🧩 Logic</button>
+  <button class="nav-btn" data-tab="script">📜 Script</button>
+  <button class="nav-btn" data-tab="debug">🐛 Debug</button>
+  <button class="nav-btn" data-tab="knowledge">📚 Knowledge</button>
+  <button class="nav-btn" data-tab="history">🕘 History</button>
+  <button class="nav-btn" data-tab="settings">⚙️ Settings</button>
+</nav>
+
+<main>
+
+<!-- ================= AI ================= -->
+
+<section class="tab active" id="tab-ai">
+
+  <div class="page-title">
+    <h2>AI Assistant</h2>
+    <p>Tanyakan cara membuat mechanic atau Logic di CMAP.</p>
+  </div>
+
+  <div class="card">
+
+    <h3>Prompt</h3>
+
+    <textarea
+      id="aiPrompt"
+      placeholder="Contoh: Bagaimana cara membuat coin bertambah saat player menyentuh coin?"
+    ></textarea>
+
+    <div class="quick">
+      <button class="chip" data-prompt="Buat sistem coin yang bertambah saat player menyentuh coin.">
+        Coin + Score
+      </button>
+
+      <button class="chip" data-prompt="Buat pintu yang terbuka ketika player menyentuh tombol.">
+        Door
+      </button>
+
+      <button class="chip" data-prompt="Buat sistem health sederhana.">
+        Health
+      </button>
+
+      <button class="chip" data-prompt="Buat teleport player ke lokasi lain.">
+        Teleport
+      </button>
+    </div>
+
+    <div class="actions">
+      <button class="btn primary" id="askAI">⚡ Ask AI</button>
+      <button class="btn" id="clearAI">Clear</button>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <h3>AI Response</h3>
+    <div class="output empty" id="aiOutput">
+Belum ada response.
+    </div>
+
+    <br>
+
+    <button class="btn small" id="copyAI">Copy</button>
+  </div>
+
+</section>
+
+
+<!-- ================= LOGIC ================= -->
+
+<section class="tab" id="tab-logic">
+
+  <div class="page-title">
+    <h2>Logic Builder</h2>
+    <p>Buat rancangan Logic berdasarkan event → condition → response.</p>
+  </div>
+
+  <div class="card">
+
+    <div class="grid">
+
+      <div>
+        <label>Event / Trigger</label>
+
+        <select id="logicEvent">
+          <option>When this is created</option>
+          <option>When player touches object</option>
+          <option>When button/control is pressed</option>
+          <option>Repeat every interval</option>
+          <option>When condition is true</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Condition</label>
+
+        <select id="logicCondition">
+          <option>No condition</option>
+          <option>Player has item</option>
+          <option>Player score is enough</option>
+          <option>Object is active</option>
+          <option>Timer reached value</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Response / Action</label>
+
+        <select id="logicResponse">
+          <option>Add score</option>
+          <option>Remove score</option>
+          <option>Change health</option>
+          <option>Teleport player</option>
+          <option>Open door</option>
+          <option>Play sound</option>
+          <option>Set variable</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Target / Value</label>
+        <input id="logicTarget" placeholder="Contoh: Coin / Door01 / 100">
+      </div>
+
+    </div>
+
+    <button class="btn primary" id="buildLogic">Build Logic Plan</button>
+
+  </div>
+
+  <div class="card">
+    <h3>Logic Plan</h3>
+    <div class="logic-flow" id="logicFlow">
+      <div class="logic-box">
+        <small>EVENT</small>
+        <strong>—</strong>
+      </div>
+
+      <div class="arrow">→</div>
+
+      <div class="logic-box">
+        <small>CONDITION</small>
+        <strong>—</strong>
+      </div>
+
+      <div class="arrow">→</div>
+
+      <div class="logic-box">
+        <small>RESPONSE</small>
+        <strong>—</strong>
+      </div>
+
+      <div class="arrow">→</div>
+
+      <div class="logic-box">
+        <small>TARGET</small>
+        <strong>—</strong>
+      </div>
+    </div>
+
+    <br>
+
+    <div class="notice warning">
+      ⚠️ Ini adalah <b>Logic PLAN</b>. Nama Rule/API CMAP yang belum
+      terverifikasi tidak akan dianggap sebagai fakta.
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ================= SCRIPT ================= -->
+
+<section class="tab" id="tab-script">
+
+  <div class="page-title">
+    <h2>Script Generator</h2>
+    <p>Buat template Lua berdasarkan mechanic yang kamu jelaskan.</p>
+  </div>
+
+  <div class="card">
+
+    <label>Mechanic</label>
+
+    <textarea
+      id="scriptPrompt"
+      placeholder="Contoh: buat coin yang menambah score ketika disentuh player"
+    ></textarea>
+
+    <button class="btn primary" id="generateScript">
+      Generate Script
+    </button>
+
+  </div>
+
+  <div class="card">
+
+    <h3>Generated Script</h3>
+
+    <div class="output empty" id="scriptOutput">
+Belum ada script.
+    </div>
+
+    <br>
+
+    <button class="btn small" id="copyScript">Copy</button>
+
+  </div>
+
+  <div class="notice warning">
+    ⚠️ Template Lua di sini adalah template konsep. Jangan menganggap
+    nama API/function sebagai API resmi CMAP kecuali sudah diverifikasi
+    dari dokumentasi/knowledge yang kamu masukkan.
+  </div>
+
+</section>
+
+
+<!-- ================= DEBUG ================= -->
+
+<section class="tab" id="tab-debug">
+
+  <div class="page-title">
+    <h2>Debug Helper</h2>
+    <p>Pemeriksaan sederhana untuk kode Lua.</p>
+  </div>
+
+  <div class="card">
+
+    <label>Paste Lua Script</label>
+
+    <textarea
+      id="debugInput"
+      placeholder="Paste script Lua kamu di sini..."
+    ></textarea>
+
+    <button class="btn primary" id="runDebug">
+      🔎 Check Script
+    </button>
+
+  </div>
+
+  <div class="card">
+
+    <h3>Debug Result</h3>
+
+    <div class="output empty" id="debugOutput">
+Belum ada pemeriksaan.
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ================= KNOWLEDGE ================= -->
+
+<section class="tab" id="tab-knowledge">
+
+  <div class="page-title">
+    <h2>Knowledge Base</h2>
+    <p>Simpan dokumentasi Logic/Script CMAP yang kamu punya.</p>
+  </div>
+
+  <div class="card">
+
+    <div class="notice">
+      💡 Tempel teks dokumentasi, daftar Logic, contoh Script,
+      atau hasil dokumentasi CMAP di bawah.
+    </div>
+
+    <textarea
+      id="knowledgeInput"
+      placeholder="Contoh:
+When player touches object
+Response: ...
+...
+"
+    ></textarea>
+
+    <div class="actions">
+      <button class="btn primary" id="saveKnowledge">
+        Save Knowledge
+      </button>
+
+      <button class="btn danger" id="clearKnowledge">
+        Delete
+      </button>
+    </div>
+
+  </div>
+
+  <div class="card">
+
+    <h3>Saved Knowledge</h3>
+
+    <div class="output" id="knowledgeStatus">
+Belum ada knowledge yang disimpan.
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ================= HISTORY ================= -->
+
+<section class="tab" id="tab-history">
+
+  <div class="page-title">
+    <h2>History</h2>
+    <p>Riwayat prompt dan hasil yang dibuat oleh Helper AI.</p>
+  </div>
+
+  <div class="card">
+
+    <div class="actions">
+      <button class="btn danger" id="clearHistory">
+        Clear History
+      </button>
+    </div>
+
+  </div>
+
+  <div id="historyList"></div>
+
+</section>
+
+
+<!-- ================= SETTINGS ================= -->
+
+<section class="tab" id="tab-settings">
+
+  <div class="page-title">
+    <h2>Settings</h2>
+    <p>Pengaturan koneksi AI dan aplikasi.</p>
+  </div>
+
+  <div class="card">
+
+    <h3>AI Connection</h3>
+
+    <label>Model</label>
+
+    <input
+      id="modelInput"
+      placeholder="Masukkan model yang tersedia di backend"
+    >
+
+    <label>Backend Endpoint</label>
+
+    <input
+      id="endpointInput"
+      placeholder="https://domain-kamu.example/api/chat"
+    >
+
+    <div class="toggle-row">
+      <div>
+        <b>Gunakan Backend API</b>
+        <div style="font-size:10px;color:var(--muted);margin-top:3px">
+          Direkomendasikan untuk API key.
+        </div>
+      </div>
+
+      <div class="toggle" id="apiToggle"></div>
+    </div>
+
+    <br>
+
+    <div class="actions">
+      <button class="btn primary" id="saveSettings">
+        Save Settings
+      </button>
+
+      <button class="btn" id="testBackend">
+        Test Backend
+      </button>
+    </div>
+
+  </div>
+
+  <div class="card">
+
+    <h3>Security</h3>
+
+    <div class="notice warning">
+      🔐 Jangan pernah memasukkan API key langsung ke
+      <b>index.html</b> jika file akan dipublikasikan.
+      Gunakan backend/proxy dan simpan key sebagai secret/environment variable.
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+
+<footer>
+  CMAP Helper AI V1 • Castle Make and Play • Local data stored in browser
+</footer>
+
+</div>
+
+
+<script>
+"use strict";
+
+/*
+  CMAP HELPER AI V1
+
+  Storage:
+  cmap-helper-v1
+
+  Backend contract:
+
+  POST /api/chat
+
+  {
+    "model": "...",
+    "prompt": "...",
+    "system": "...",
+    "knowledge": "..."
+  }
+
+  Expected response can contain:
+  {
+    "output": "...",
+    "text": "...",
+    "response": "...",
+    "message": "..."
+  }
+*/
+
+const STORAGE_KEY = "cmap-helper-v1";
+
+let state = {
+  settings:{
+    model:"",
+    endpoint:"",
+    useBackend:false
+  },
+
+  knowledge:"",
+
+  history:[]
+};
+
+
+/* ================= STORAGE ================= */
+
+function loadState(){
+
+  try{
+
+    const raw = localStorage.getItem(STORAGE_KEY);
+
+    if(raw){
+      const parsed = JSON.parse(raw);
+
+      state = {
+        ...state,
+        ...parsed,
+        settings:{
+          ...state.settings,
+          ...(parsed.settings || {})
+        }
+      };
+    }
+
+  }catch(error){
+
+    console.warn("Could not load state",error);
+
+  }
+
+}
+
+
+function saveState(){
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(state)
+  );
+
+}
+
+
+/* ================= HELPERS ================= */
+
+function $(id){
+  return document.getElementById(id);
+}
+
+
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+function addHistory(type,input,output){
+
+  state.history.unshift({
+    type,
+    input,
+    output,
+    time:new Date().toLocaleString()
+  });
+
+  state.history =
+    state.history.slice(0,30);
+
+  saveState();
+  renderHistory();
+
+}
+
+
+/* ================= NAVIGATION ================= */
+
+document.querySelectorAll(".nav-btn").forEach(button=>{
+
+  button.addEventListener("click",()=>{
+
+    document.querySelectorAll(".nav-btn")
+      .forEach(btn=>btn.classList.remove("active"));
+
+    document.querySelectorAll(".tab")
+      .forEach(tab=>tab.classList.remove("active"));
+
+    button.classList.add("active");
+
+    const target =
+      $("tab-"+button.dataset.tab);
+
+    if(target){
+      target.classList.add("active");
+    }
+
+  });
+
+});
+
+
+/* ================= AI ================= */
+
+document.querySelectorAll(".chip").forEach(chip=>{
+
+  chip.addEventListener("click",()=>{
+
+    $("aiPrompt").value =
+      chip.dataset.prompt;
+
+    $("aiPrompt").focus();
+
+  });
+
+});
+
+
+$("clearAI").addEventListener("click",()=>{
+
+  $("aiPrompt").value="";
+
+  $("aiOutput").textContent =
+    "Belum ada response.";
+
+  $("aiOutput").classList.add("empty");
+
+});
+
+
+async function askAI(){
+
+  const prompt =
+    $("aiPrompt").value.trim();
+
+  if(!prompt){
+
+    $("aiOutput").textContent =
+      "Tulis pertanyaan terlebih dahulu.";
+
+    $("aiOutput").classList.remove("empty");
+
+    return;
+
+  }
+
+  if(!state.settings.useBackend ||
+     !state.settings.endpoint){
+
+    const offline =
+      offlineAI(prompt);
+
+    $("aiOutput").textContent =
+      offline;
+
+    $("aiOutput").classList.remove("empty");
+
+    addHistory(
+      "AI",
+      prompt,
+      offline
+    );
+
+    return;
+
+  }
+
+
+  $("aiOutput").textContent =
+    "Connecting to AI...";
+
+  $("aiOutput").classList.remove("empty");
+
+
+  try{
+
+    const response =
+      await fetch(
+        state.settings.endpoint,
+        {
+          method:"POST",
+
+          headers:{
+            "Content-Type":"application/json"
+          },
+
+          body:JSON.stringify({
+
+            model:state.settings.model,
+
+            prompt:prompt,
+
+            system:
+              "You are CMAP Helper AI. Be accurate. Never invent undocumented CMAP APIs. If information is unknown, say so.",
+
+            knowledge:state.knowledge
+
+          })
+
+        }
+      );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "Backend HTTP "+response.status
+      );
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    const output =
+      data.output ??
+      data.text ??
+      data.response ??
+      data.message;
+
+
+    if(!output){
+
+      throw new Error(
+        "Backend response tidak memiliki output."
+      );
+
+    }
+
+
+    $("aiOutput").textContent =
+      output;
+
+    addHistory(
+      "AI",
+      prompt,
+      output
+    );
+
+
+  }catch(error){
+
+    $("aiOutput").textContent =
+      "Backend Error:\n\n"+
+      error.message+
+      "\n\nPastikan endpoint backend benar dan CORS mengizinkan halaman ini.";
+
+  }
+
+}
+
+
+$("askAI").addEventListener(
+  "click",
+  askAI
+);
+
+
+function offlineAI(prompt){
+
+  const p =
+    prompt.toLowerCase();
+
+
+  if(
+    p.includes("coin") ||
+    p.includes("score")
+  ){
+
+    return `
+OFFLINE CMAP HELPER
+
+Tujuan:
+Membuat coin memberikan score ketika player menyentuhnya.
+
+Rancangan Logic:
+
+1. EVENT
+   Player menyentuh object coin.
+
+2. CONDITION
+   Pastikan coin masih aktif / belum diklaim.
+
+3. RESPONSE
+   Tambahkan score.
+
+4. TARGET
+   Coin object.
+
+Catatan:
+Nama Rule/Logic CMAP yang tepat harus diverifikasi
+dengan dokumentasi CMAP yang tersedia.
+`;
+
+  }
+
+
+  if(
+    p.includes("door") ||
+    p.includes("pintu")
+  ){
+
+    return `
+OFFLINE CMAP HELPER
+
+Rancangan:
+
+EVENT
+Player melakukan trigger pada tombol.
+
+↓
+
+CONDITION
+Tombol memenuhi kondisi yang diperlukan.
+
+↓
+
+RESPONSE
+Door berubah ke keadaan terbuka.
+
+↓
+
+TARGET
+Door object.
+
+Nama Logic/API spesifik belum diverifikasi.
+`;
+
+  }
+
+
+  if(
+    p.includes("teleport")
+  ){
+
+    return `
+OFFLINE CMAP HELPER
+
+Rancangan:
+
+EVENT
+Player mengaktifkan trigger.
+
+↓
+
+CONDITION
+Trigger valid.
+
+↓
+
+RESPONSE
+Pindahkan player.
+
+↓
+
+TARGET
+Lokasi tujuan.
+
+Koordinat dan API teleport harus mengikuti dokumentasi CMAP.
+`;
+
+  }
+
+
+  return `
+OFFLINE MODE
+
+Aku bisa membantu membuat rancangan mechanic,
+tetapi koneksi AI backend belum aktif.
+
+Coba jelaskan:
+
+• Event yang terjadi
+• Condition
+• Response
+• Target
+
+Contoh:
+
+"Ketika player menyentuh coin,
+score bertambah 10."
+`;
+
+}
+
+
+/* ================= COPY ================= */
+
+async function copyText(text){
+
+  try{
+
+    await navigator.clipboard.writeText(text);
+
+    alert("Copied!");
+
+  }catch{
+
+    alert("Copy gagal. Silakan copy manual.");
+
+  }
+
+}
+
+
+$("copyAI").addEventListener("click",()=>{
+
+  copyText(
+    $("aiOutput").textContent
+  );
+
+});
+
+
+/* ================= LOGIC ================= */
+
+$("buildLogic").addEventListener(
+  "click",
+  buildLogic
+);
+
+
+function buildLogic(){
+
+  const event =
+    $("logicEvent").value;
+
+  const condition =
+    $("logicCondition").value;
+
+  const response =
+    $("logicResponse").value;
+
+  const target =
+    $("logicTarget").value.trim() ||
+    "Not specified";
+
+
+  $("logicFlow").innerHTML = `
+
+    <div class="logic-box">
+      <small>EVENT</small>
+      <strong>${escapeHTML(event)}</strong>
+    </div>
+
+    <div class="arrow">→</div>
+
+    <div class="logic-box">
+      <small>CONDITION</small>
+      <strong>${escapeHTML(condition)}</strong>
+    </div>
+
+    <div class="arrow">→</div>
+
+    <div class="logic-box">
+      <small>RESPONSE</small>
+      <strong>${escapeHTML(response)}</strong>
+    </div>
+
+    <div class="arrow">→</div>
+
+    <div class="logic-box">
+      <small>TARGET</small>
+      <strong>${escapeHTML(target)}</strong>
+    </div>
+
+  `;
+
+
+  const plan =
+`LOGIC PLAN
+
+EVENT:
+${event}
+
+CONDITION:
+${condition}
+
+RESPONSE:
+${response}
+
+TARGET:
+${target}`;
+
+
+  addHistory(
+    "Logic",
+    target,
+    plan
+  );
+
+}
+
+
+/* ================= SCRIPT ================= */
+
+$("generateScript").addEventListener(
+  "click",
+  generateScript
+);
+
+
+function generateScript(){
+
+  const prompt =
+    $("scriptPrompt").value.trim();
+
+  if(!prompt){
+
+    $("scriptOutput").textContent =
+      "Masukkan mechanic terlebih dahulu.";
+
+    $("scriptOutput").classList.remove("empty");
+
+    return;
+
+  }
+
+
+  const p =
+    prompt.toLowerCase();
+
+  let script;
+
+
+  if(
+    p.includes("coin") ||
+    p.includes("score")
+  ){
+
+    script =
+`-- CMAP Helper AI
+-- CONCEPT TEMPLATE
+-- Verify CMAP API names before using.
+
+local score = 0
+
+function onCoinTouched(player)
+    -- Check player
+    if player then
+
+        -- Add score
+        score = score + 1
+
+        print("Score:", score)
+
+    end
+end`;
+
+  }
+
+  else if(
+    p.includes("timer") ||
+    p.includes("waktu")
+  ){
+
+    script =
+`-- CMAP Helper AI
+-- CONCEPT TEMPLATE
+-- Verify CMAP API names before using.
+
+local timeLeft = 60
+
+function updateTimer(delta)
+    timeLeft = timeLeft - delta
+
+    if timeLeft <= 0 then
+        timeLeft = 0
+        print("Timer finished")
+    end
+end`;
+
+  }
+
+  else if(
+    p.includes("health") ||
+    p.includes("darah")
+  ){
+
+    script =
+`-- CMAP Helper AI
+-- CONCEPT TEMPLATE
+-- Verify CMAP API names before using.
+
+local health = 100
+
+function damage(amount)
+
+    health = health - amount
+
+    if health < 0 then
+        health = 0
+    end
+
+    print("Health:", health)
+end`;
+
+  }
+
+  else{
+
+    script =
+`-- CMAP Helper AI
+-- GENERIC CONCEPT TEMPLATE
+-- Verify CMAP API names before using.
+
+local active = true
+
+function mechanic()
+
+    if active then
+
+        -- Add your CMAP mechanic here.
+
+    end
+
+end`;
+
+  }
+
+
+  $("scriptOutput").textContent =
+    script;
+
+  $("scriptOutput").classList.remove("empty");
+
+
+  addHistory(
+    "Script",
+    prompt,
+    script
+  );
+
+}
+
+
+$("copyScript").addEventListener(
+  "click",
+  ()=>copyText(
+    $("scriptOutput").textContent
+  )
+);
+
+
+/* ================= DEBUG ================= */
+
+$("runDebug").addEventListener(
+  "click",
+  debugScript
+);
+
+
+function debugScript(){
+
+  const code =
+    $("debugInput").value;
+
+
+  if(!code.trim()){
+
+    $("debugOutput").textContent =
+      "Paste script terlebih dahulu.";
+
+    $("debugOutput").classList.remove("empty");
+
+    return;
+
+  }
+
+
+  const results = [];
+
+
+  /* END CHECK */
+
+  let opens = 0;
+
+  const lines =
+    code.split(/\r?\n/);
+
+
+  for(const line of lines){
+
+    const trimmed =
+      line.trim();
+
+    if(
+      trimmed.startsWith("--")
+    ) continue;
+
+
+    const withoutStrings =
+      trimmed.replace(
+        /(["']).*?\1/g,
+        ""
+      );
+
+
+    const tokens =
+      withoutStrings.match(
+        /\b(function|if|for|while|do|repeat|end|until)\b/g
+      ) || [];
+
+
+    for(const token of tokens){
+
+      if(
+        token === "function" ||
+        token === "if" ||
+        token === "for" ||
+        token === "while" ||
+        token === "do"
+      ){
+
+        opens++;
+
+      }
+
+      else if(token === "end"){
+
+        opens--;
+
+        if(opens < 0){
+
+          results.push(
+            "⚠️ Ada 'end' berlebih."
+          );
+
+          opens=0;
+
+        }
+
+      }
+
+    }
+
+  }
+
+
+  if(opens > 0){
+
+    results.push(
+      "⚠️ Kemungkinan ada block yang belum ditutup dengan 'end'."
+    );
+
+  }
+
+
+  if(
+    code.includes("TODO") ||
+    code.includes("FIXME") ||
+    code.includes("???")
+  ){
+
+    results.push(
+      "⚠️ Ditemukan placeholder TODO/FIXME/???"
+    );
+
+  }
+
+
+  if(
+    /\bnil\b/.test(code)
+  ){
+
+    results.push(
+      "ℹ️ Script mengandung 'nil'. Pastikan nil memang diinginkan."
+    );
+
+  }
+
+
+  if(results.length === 0){
+
+    results.push(
+      "✅ Tidak ditemukan masalah sederhana dari pemeriksaan V1."
+    );
+
+  }
+
+
+  results.push(
+    "",
+    "Catatan: ini bukan Lua/CMAP validator penuh."
+  );
+
+
+  const output =
+    results.join("\n");
+
+
+  $("debugOutput").textContent =
+    output;
+
+  $("debugOutput").classList.remove("empty");
+
+
+  addHistory(
+    "Debug",
+    code.slice(0,100),
+    output
+  );
+
+}
+
+
+/* ================= KNOWLEDGE ================= */
+
+$("saveKnowledge").addEventListener(
+  "click",
+  ()=>{
+
+    state.knowledge =
+      $("knowledgeInput").value;
+
+    saveState();
+
+    updateKnowledgeStatus();
+
+    alert("Knowledge berhasil disimpan.");
+
+  }
+);
+
+
+$("clearKnowledge").addEventListener(
+  "click",
+  ()=>{
+
+    if(!confirm(
+      "Hapus semua Knowledge Base?"
+    )) return;
+
+    state.knowledge = "";
+
+    saveState();
+
+    $("knowledgeInput").value="";
+
+    updateKnowledgeStatus();
+
+  }
+);
+
+
+function updateKnowledgeStatus(){
+
+  if(!state.knowledge){
+
+    $("knowledgeStatus").textContent =
+      "Belum ada knowledge yang disimpan.";
+
+    return;
+
+  }
+
+
+  const lines =
+    state.knowledge
+      .split(/\r?\n/)
+      .length;
+
+
+  $("knowledgeStatus").textContent =
+`Knowledge Base aktif.
+
+Characters: ${state.knowledge.length}
+Lines: ${lines}
+
+AI akan menerima knowledge ini
+ketika menggunakan backend.`;
+
+}
+
+
+/* ================= HISTORY ================= */
+
+function renderHistory(){
+
+  const container =
+    $("historyList");
+
+
+  if(!state.history.length){
+
+    container.innerHTML = `
+
+      <div class="card">
+        <div class="output empty">
+          Belum ada history.
+        </div>
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    state.history.map(
+      (item,index)=>`
+
+      <div class="history-item">
+
+        <div class="meta">
+          ${escapeHTML(item.type)}
+          •
+          ${escapeHTML(item.time)}
+        </div>
+
+        <div class="input-preview">
+          ${escapeHTML(item.input)}
+        </div>
+
+        <br>
+
+        <button
+          class="btn small"
+          onclick="restoreHistory(${index})">
+          Restore
+        </button>
+
+      </div>
+
+      `
+    ).join("");
+
+}
+
+
+window.restoreHistory =
+function(index){
+
+  const item =
+    state.history[index];
+
+  if(!item) return;
+
+
+  if(item.type === "AI"){
+
+    $("aiPrompt").value =
+      item.input;
+
+    $("aiOutput").textContent =
+      item.output;
+
+    $("aiOutput").classList.remove("empty");
+
+  }
+
+
+  if(item.type === "Script"){
+
+    $("scriptPrompt").value =
+      item.input;
+
+    $("scriptOutput").textContent =
+      item.output;
+
+    $("scriptOutput").classList.remove("empty");
+
+  }
+
+
+  if(item.type === "Debug"){
+
+    $("debugInput").value =
+      item.input;
+
+    $("debugOutput").textContent =
+      item.output;
+
+    $("debugOutput").classList.remove("empty");
+
+  }
+
+};
+
+
+$("clearHistory").addEventListener(
+  "click",
+  ()=>{
+
+    if(!confirm(
+      "Hapus semua history?"
+    )) return;
+
+    state.history=[];
+
+    saveState();
+
+    renderHistory();
+
+  }
+);
+
+
+/* ================= SETTINGS ================= */
+
+function loadSettingsUI(){
+
+  $("modelInput").value =
+    state.settings.model || "";
+
+  $("endpointInput").value =
+    state.settings.endpoint || "";
+
+  setToggle(
+    state.settings.useBackend
+  );
+
+}
+
+
+function setToggle(value){
+
+  const toggle =
+    $("apiToggle");
+
+  toggle.classList.toggle(
+    "on",
+    Boolean(value)
+  );
+
+}
+
+
+$("apiToggle").addEventListener(
+  "click",
+  ()=>{
+
+    const current =
+      $("apiToggle").classList.contains("on");
+
+    setToggle(!current);
+
+  }
+);
+
+
+$("saveSettings").addEventListener(
+  "click",
+  ()=>{
+
+    state.settings.model =
+      $("modelInput").value.trim();
+
+    state.settings.endpoint =
+      $("endpointInput").value.trim();
+
+    state.settings.useBackend =
+      $("apiToggle").classList.contains("on");
+
+
+    saveState();
+
+    alert("Settings disimpan.");
+
+  }
+);
+
+
+$("testBackend").addEventListener(
+  "click",
+  async()=>{
+
+    const endpoint =
+      $("endpointInput").value.trim();
+
+
+    if(!endpoint){
+
+      alert("Masukkan endpoint backend terlebih dahulu.");
+
+      return;
+
+    }
+
+
+    try{
+
+      const response =
+        await fetch(
+          endpoint,
+          {
+            method:"POST",
+
+            headers:{
+              "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify({
+
+              model:
+                $("modelInput").value.trim(),
+
+              prompt:
+                "Reply only: CMAP BACKEND OK",
+
+              system:
+                "Connection test.",
+
+              knowledge:""
+
+            })
+
+          }
+        );
+
+
+      if(!response.ok){
+
+        throw new Error(
+          "HTTP "+response.status
+        );
+
+      }
+
+
+      alert(
+        "Backend merespons dengan HTTP "+
+        response.status+
+        "."
+      );
+
+
+    }catch(error){
+
+      alert(
+        "Backend test gagal:\n"+
+        error.message
+      );
+
+    }
+
+  }
+);
+
+
+/* ================= START ================= */
+
+loadState();
+
+$("knowledgeInput").value =
+  state.knowledge || "";
+
+loadSettingsUI();
+
+updateKnowledgeStatus();
+
+renderHistory();
+
+</script>
+
+</body>
+  </html>
